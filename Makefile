@@ -1,8 +1,13 @@
-#GOPATH:=$(PWD):${GOPATH}
-#export GOPATH
-flags=-ldflags="-s -w"
-# flags=-ldflags="-s -w -extldflags -static"
+GITVERSION=`git rev-parse --short HEAD`
+VERSION=`git describe --tags`
 TAG := $(shell git tag | sed -e "s,v,," | sort -r | head -n 1)
+OS := $(shell uname)
+ifeq ($(OS),Darwin)
+flags=-ldflags="-s -w -X main.gitVersion=${GITVERSION} -X main.tagVersion=${VERSION}"
+else
+flags=-ldflags="-s -w -X main.gitVersion=${GITVERSION} -X main.tagVersion=${VERSION} -extldflags -static"
+endif
+
 
 all: build
 

@@ -16,11 +16,14 @@ import (
 // version of the code
 var gitVersion string
 
+// tagVersion of the code shows git tag
+var tagVersion string
+
 // Info function returns version string of the server
 func info() string {
 	goVersion := runtime.Version()
 	tstamp := time.Now().Format("2006-02-01")
-	return fmt.Sprintf("srv git=%s go=%s date=%s", gitVersion, goVersion, tstamp)
+	return fmt.Sprintf("wmpayload server tag=%s git=%s go=%s date=%s", tagVersion, gitVersion, goVersion, tstamp)
 }
 
 func main() {
