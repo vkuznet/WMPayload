@@ -8,6 +8,7 @@ import (
 
 	"github.com/valyala/fasthttp"
 	"go.mongodb.org/mongo-driver/mongo/options"
+	"gopkg.in/mgo.v2/bson"
 )
 
 func insertHandler(ctx *fasthttp.RequestCtx) {
@@ -39,9 +40,11 @@ func insertHandler(ctx *fasthttp.RequestCtx) {
 func searchHandler(ctx *fasthttp.RequestCtx) {
 	idx := ctx.QueryArgs().GetUintOrZero("idx")
 	limit := ctx.QueryArgs().GetUintOrZero("limit")
+	uuid := string(ctx.QueryArgs().Peek("id"))
 
 	collection := mongoDB.Collection(config.MongoCollection)
-	cursor, err := collection.Find(context.Background(), map[string]interface{}{}, options.Find().SetSkip(int64(idx)).SetLimit(int64(limit)))
+	spec := bson.M{"id": uuid}
+	cursor, err := collection.Find(context.Background(), spec, options.Find().SetSkip(int64(idx)).SetLimit(int64(limit)))
 	if err != nil {
 		ctx.Error("Failed to retrieve documents", fasthttp.StatusInternalServerError)
 		return
