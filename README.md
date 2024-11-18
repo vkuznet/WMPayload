@@ -122,5 +122,3 @@ using JSON data-format):
 | write     | ReqMgr2  | 0.8ms   | 60KB  | 666 |
 | read      | auto-gen | 0.2ms   | 12KB  | 124 |
 | read      | ReqMgr2  | 75ms    | 102MB | 238 |
-
-Please note
