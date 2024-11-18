@@ -4,8 +4,10 @@ import (
 	"context"
 	"encoding/json"
 	"fmt"
+	"io"
 	"log"
 	"math/rand"
+	"os"
 
 	"github.com/google/uuid"
 	"go.mongodb.org/mongo-driver/mongo/options"
@@ -13,11 +15,29 @@ import (
 )
 
 func generateRandomDoc() ([]byte, string, error) {
-	doc := map[string]interface{}{
-		"id":    uuid.NewString(),
-		"name":  randomString(10),
-		"email": randomString(10) + "@example.com",
-		"age":   rand.Intn(50) + 18,
+	var doc map[string]any
+	if config.JsonFile != "" {
+		file, err := os.Open(config.JsonFile)
+		if err != nil {
+			return nil, "", err
+		}
+		defer file.Close()
+		data, err := io.ReadAll(file)
+		if err != nil {
+			return nil, "", err
+		}
+		err = json.Unmarshal(data, &doc)
+		if err != nil {
+			return nil, "", err
+		}
+		doc["id"] = uuid.NewString()
+	} else {
+		doc = map[string]interface{}{
+			"id":    uuid.NewString(),
+			"name":  randomString(10),
+			"email": randomString(10) + "@example.com",
+			"age":   rand.Intn(50) + 18,
+		}
 	}
 	var records []map[string]any
 	records = append(records, doc)

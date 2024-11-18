@@ -21,6 +21,7 @@ type Config struct {
 	MongoURI        string `json:"mongo_uri"`
 	MongoDatabase   string `json:"mongo_database"`
 	MongoCollection string `json:"mongo_collection"`
+	JsonFile        string `json:"json_file"`
 }
 
 var config Config

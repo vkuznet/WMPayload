@@ -17,6 +17,17 @@ var (
 )
 var uuids []string
 
+func initConfig() {
+	err := loadConfig("config.json")
+	if err != nil {
+		log.Fatalf("Failed to load config: %v", err)
+	}
+	err = connectMongoDB()
+	if err != nil {
+		log.Fatal(err)
+	}
+}
+
 // Helper function to insert a document
 func insertDocument(b *testing.B) error {
 	doc, _, err := generateRandomDoc()
@@ -50,6 +61,7 @@ func searchDocument(b *testing.B, uuid string) error {
 
 // Benchmark for insert endpoint
 func BenchmarkDBInsert(b *testing.B) {
+	initConfig()
 	var wg sync.WaitGroup
 	ch := make(chan error, b.N)
 
@@ -77,6 +89,7 @@ func BenchmarkDBInsert(b *testing.B) {
 
 // Benchmark for search endpoint
 func BenchmarkInsert(b *testing.B) {
+	initConfig()
 	// Generate random documents and insert them
 	errorCount := 0
 	for i := 0; i < b.N; i++ {
@@ -96,20 +109,13 @@ func BenchmarkInsert(b *testing.B) {
 
 // Benchmark for search endpoint
 func BenchmarkSearch(b *testing.B) {
+	initConfig()
 	// Benchmark the search by UUID
 	var wg sync.WaitGroup
+	var err error
 	ch := make(chan error, b.N)
 
 	if len(uuids) == 0 {
-		err := loadConfig("config.json")
-		if err != nil {
-			log.Fatalf("Failed to load config: %v", err)
-		}
-		err = connectMongoDB()
-		if err != nil {
-			b.Fatal(err)
-		}
-
 		uuids, err = getAllIDs(config.MongoCollection, "id")
 		if err != nil {
 			b.Fatal(err)
