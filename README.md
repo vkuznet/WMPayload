@@ -7,6 +7,7 @@
 ```
 
 ```
+# open up another terminal (tab) and
 # run insert benchmark using flat json
 
 goos: darwin
