@@ -114,7 +114,8 @@ ok  	github.com/vkuznet/wmpayload	4.003s
 ```
 So, it is 75ms, and 100MB per operation.
 
-We summarize our results in the following table:
+We summarize our results in the following table (please note, all tests done
+using JSON data-format):
 | operation | document | req/sec | bytes/operation | memory allocations |
 |-----------|----------|---------|-----------------|--------------------|
 | write     | auto-gen | 0.5ms   | 12KB  | 197 |
