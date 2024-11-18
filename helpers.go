@@ -14,22 +14,28 @@ import (
 	"gopkg.in/mgo.v2/bson"
 )
 
+var wmaDoc map[string]any
+
 func generateRandomDoc() ([]byte, string, error) {
 	var doc map[string]any
 	if config.JsonFile != "" {
-		file, err := os.Open(config.JsonFile)
-		if err != nil {
-			return nil, "", err
+		if len(wmaDoc) == 0 {
+			wmaDoc = make(map[string]any)
+			file, err := os.Open(config.JsonFile)
+			if err != nil {
+				return nil, "", err
+			}
+			defer file.Close()
+			data, err := io.ReadAll(file)
+			if err != nil {
+				return nil, "", err
+			}
+			err = json.Unmarshal(data, &wmaDoc)
+			if err != nil {
+				return nil, "", err
+			}
 		}
-		defer file.Close()
-		data, err := io.ReadAll(file)
-		if err != nil {
-			return nil, "", err
-		}
-		err = json.Unmarshal(data, &doc)
-		if err != nil {
-			return nil, "", err
-		}
+		doc = wmaDoc
 		doc["id"] = uuid.NewString()
 	} else {
 		doc = map[string]interface{}{
