@@ -102,7 +102,7 @@ ok  	github.com/vkuznet/wmpayload	2.728s
 ```
 Now, the search takes 0.2 ms (10+ times better).
 
-And, using ReqMgr2 JSON docs in MongoDB we got the following performance:
+And, search for all ReqMgr2 JSON docs in MongoDB we got the following performance:
 ```
 goos: darwin
 goarch: arm64
@@ -112,13 +112,21 @@ BenchmarkSearch-8   	      14	  75389929 ns/op	         1.000 success_rate	10265
 PASS
 ok  	github.com/vkuznet/wmpayload	4.003s
 ```
-So, it is 75ms, and 100MB per operation.
+So, it is 75ms, and 100MB per operation to fetch all documents.
+
+If we're looking for a single document, the performance numbers are much
+better:
+```
+BenchmarkSearch-8   	    3302	    511178 ns/op	         0.2247 success_rate	   38716 B/op	     201 allocs/op
+```
+
 
 We summarize our results in the following table (please note, all tests done
 using JSON data-format):
-| operation | document | req/sec | bytes/operation | memory allocations |
-|-----------|----------|---------|-----------------|--------------------|
-| write     | auto-gen | 0.5ms   | 12KB  | 197 |
-| write     | ReqMgr2  | 0.8ms   | 60KB  | 666 |
-| read      | auto-gen | 0.2ms   | 12KB  | 124 |
-| read      | ReqMgr2  | 75ms    | 102MB | 238 |
+| operation | document | req/sec | bytes/operation | memory allocations | note |
+|-----------|----------|---------|-----------------|--------------------|------|
+| write     | auto-gen | 0.5ms   | 12KB  | 197 | |
+| write     | ReqMgr2  | 0.8ms   | 60KB  | 666 | |
+| read      | auto-gen | 0.2ms   | 12KB  | 124 | |
+| read      | ReqMgr2  | 0.5ms   | 38KB | 201  | |
+| read      | ReqMgr2  | 75ms    | 102MB | 238 | fetch all documents |
