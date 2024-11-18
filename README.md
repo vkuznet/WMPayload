@@ -123,10 +123,10 @@ BenchmarkSearch-8   	    3302	    511178 ns/op	         0.2247 success_rate	   3
 
 We summarize our results in the following table (please note, all tests done
 using JSON data-format):
-| operation | document | req/sec | bytes/operation | memory allocations | note |
-|-----------|----------|---------|-----------------|--------------------|------|
-| write     | auto-gen | 0.5ms   | 12KB  | 197 | |
-| write     | ReqMgr2  | 0.8ms   | 60KB  | 666 | |
-| read      | auto-gen | 0.2ms   | 12KB  | 124 | |
-| read      | ReqMgr2  | 0.5ms   | 38KB | 201  | |
-| read      | ReqMgr2  | 75ms    | 102MB | 238 | fetch all documents |
+| operation | document | req/sec | bytes/operation | memory allocations |
+|-----------|----------|---------|-----------------|--------------------|
+| write single doc | auto-gen | 0.5ms   | 12KB  | 197 |
+| write single doc | ReqMgr2  | 0.8ms   | 60KB  | 666 |
+| read single doc | auto-gen | 0.2ms   | 12KB  | 124 |
+| read single doc | ReqMgr2  | 0.5ms   | 38KB | 201  |
+| read all docs  | ReqMgr2  | 75ms    | 102MB | 238 |
